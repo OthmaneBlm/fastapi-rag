@@ -54,7 +54,7 @@ AZURE_OPENAI_EMBEDDING_DEPLOYMENT=text-embedding-3-large
 AZURE_OPENAI_CHAT_DEPLOYMENT=gpt-4o-mini
 
 # App
-DATA_DIR=/data                 # for Docker; use ./data for pure local runs
+DATA_DIR=/docs                 # for Docker; use ./docs for pure local runs
 VECTORSTORES_DIR=/vectorstores # for Docker; use ./vectorstores for pure local runs
 DEFAULT_TOP_K=4
 CHUNK_SIZE=1000
@@ -84,7 +84,7 @@ Open: http://localhost:8000/docs
 docker build -t rag-fastapi-azure:local .
 docker run --rm -it -p 8000:8000 \
   --env-file .env \
-  -v "$PWD/data:/data" \
+  -v "$PWD/docs:/docs" \
   -v "$PWD/vectorstores:/vectorstores" \
   rag-fastapi-azure:local
 ```
@@ -98,7 +98,7 @@ Open: http://localhost:8000/docs
 - Open **POST `/ingest`** → **Try it out** → Body:
 ```json
 {
-  "source_dir": "/data",
+  "source_dir": "/docs",
   "mode": "per_file"
 }
 ```
@@ -119,34 +119,9 @@ Open **POST `/query`** → Body:
 {
   "question": "What is our PTO policy?",
   "collection_names": "my_collection",
-  "top_k": 4
-}
-```
-
-### List collections
-Open **GET `/collections`**.
-
-
-## API Reference
-
-### `POST /ingest`
-Request:
-```json
-{
-  "source_dir": "/data",
-  "files": [],
-  "mode": "per_file",        // "per_file" or "merge"
-  "collection_name": null,   // required when mode = "merge"
-  "chunk_size": 1000,
-  "chunk_overlap": 150,
-  "max_chunks_per_file": 2000
-}
-```
-Response:
-```json
-{
-  "created_collections": ["hr_policy", "benefits"],
-  "total_chunks": 342
+  "top_k": 4,
+  "temperature": 0.1,
+  "max_tokens":500 
 }
 ```
 
@@ -155,9 +130,10 @@ Request:
 ```json
 {
   "question": "…",
-  "collection_names": ["hr_policy"],
+  "collection_names": "hr_policy",
   "top_k": 4,
-  "chat_deployment": null    // optional override
+  "temperature":,
+  "max_tokens":   // optional override
 }
 ```
 Response:
