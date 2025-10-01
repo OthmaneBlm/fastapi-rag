@@ -102,16 +102,6 @@ Open: http://localhost:8000/docs
   "mode": "per_file"
 }
 ```
-This creates **one collection per PDF** (collection name = file name without extension).
-
-**Merge several PDFs into one collection:**
-```json
-{
-  "source_dir": "/data",
-  "mode": "merge",
-  "collection_name": "my_collection"
-}
-```
 
 ### Query
 Open **POST `/query`** → Body:
@@ -145,19 +135,3 @@ Response:
   ]
 }
 ```
-
-### `GET /collections`
-Response:
-```json
-{ "collections": ["hr_policy","my_collection"] }
-```
-
-## Vector Store Paths & Mounts
-
-The app writes to `VECTORSTORES_DIR`. Common cases:
-
-- **Docker (recommended):** set `VECTORSTORES_DIR=/vectorstores` in `.env` and mount your host folder to `/vectorstores`.
-- **Local venv:** set `VECTORSTORES_DIR=./vectorstores` and it will write next to your code.
-
-**Symptom:** collection exists in API but no files on host → your app wrote to `/app/vectorstores` while you mounted the host folder to `/vectorstores`.  
-**Fix:** either set `VECTORSTORES_DIR=/vectorstores` **or** mount to `/app/vectorstores`.
