@@ -1,0 +1,6 @@
+# already present, but double-check:
+.env
+
+# if your vector DB folder is named like this:
+vecotr_dbs/
+!vecotr_dbs/.gitkeep
